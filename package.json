@@ -1,0 +1,21 @@
+{
+  "name": "ep.u3d.editor.proto",
+  "displayName": "EP.U3D.EDITOR.PROTO",
+  "description": "Proto editor.",
+  "version": "0.0.1",
+  "unity": "2019.2",
+  "unityRelease": "0a12",
+  "relatedPackages": {},
+  "upmCi": {},
+  "repository": {
+    "url": "https://github.com/wellshsu/EP.U3D.EDITOR.PROTO.git",
+    "type": "git"
+  },
+  "keywords": [],
+  "author": {
+    "name": "Wells Hsu",
+    "email": "wellshsu@outlook.com",
+    "url": "https://github.com/wellshsu"
+  },
+  "type": "tool"
+}
