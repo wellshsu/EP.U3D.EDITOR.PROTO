@@ -51,10 +51,10 @@ namespace EP.U3D.EDITOR.PROTO
                 else if (file.EndsWith(".proto"))
                 {
 #if EFRAME_CS
-                    Proto2CS(pkg.resolvedPath, Constants.PROTO_SRC_PATH, name, file, Constants.PROTO_ILR_PATH, false);
+                    Proto2CS(pkg.resolvedPath, Constants.PROTO_SRC_PATH, name, file, Constants.PROTO_CS_PATH, false);
 #endif
 #if EFRAME_ILR
-                    Proto2CS(pkg.resolvedPath, Constants.PROTO_SRC_PATH, name, file, Constants.PROTO_CS_PATH, true);
+                    Proto2CS(pkg.resolvedPath, Constants.PROTO_SRC_PATH, name, file, Constants.PROTO_ILR_PATH, true);
 #endif
 #if EFRAME_LUA
                     Proto2LUA(pkg.resolvedPath, Constants.PROTO_SRC_PATH, name, file, Constants.PROTO_LUA_PATH);
