@@ -225,7 +225,7 @@ namespace EP.U3D.EDITOR.PROTO
             // 使用相对路径时，必须设置proto_path，否则无法定位proto文件的位置。
             Process cmd = new Process();
             cmd.StartInfo.FileName = env + "/Editor/Libs/Protoc~/ForCS/protogen.exe";
-            string arg = Helper.StringFormat("--proto_path={0} --csharp_out={1} --package={2} {3}", root, dst, ilr ? "ProtoILR" : "ProtoCS", Path.GetFileName(tmp));
+            string arg = Helper.StringFormat("--proto_path={0} --csharp_out={1} +names=original --package={2} {3}", root, dst, ilr ? $"ILRProto.{name}" : $"CSProto.{name}", Path.GetFileName(tmp));
             cmd.StartInfo.WorkingDirectory = env + "/Editor/Libs/Protoc~/ForCS/";
             cmd.StartInfo.Arguments = arg;
             cmd.Start();
