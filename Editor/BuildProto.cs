@@ -70,7 +70,7 @@ namespace EP.U3D.EDITOR.PROTO
         public virtual void Header2CS(string header, string dst, string name, bool ilr)
         {
             string ctt = "// AUTO GENERATED, DO NOT EDIT //\n";
-            ctt += $"namespace {(ilr ? "ProtoILR" : "ProtoCS")}\n";
+            ctt += $"namespace {(ilr ? "ILRProto" : "CSProto")}\n";
             ctt += "{";
             string[] lines = File.ReadAllLines(header);
             for (int i = 0; i < lines.Length; i++)
