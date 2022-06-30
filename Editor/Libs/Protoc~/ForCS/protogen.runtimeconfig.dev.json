@@ -1,8 +1,0 @@
-{
-  "runtimeOptions": {
-    "additionalProbingPaths": [
-      "C:\\Users\\redmi\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\redmi\\.nuget\\packages"
-    ]
-  }
-}

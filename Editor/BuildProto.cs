@@ -8,6 +8,8 @@
 //                  SEE LICENSE.md FOR MORE DETAILS.                   //
 //---------------------------------------------------------------------//
 using EP.U3D.EDITOR.BASE;
+using Google.Protobuf.Reflection;
+using ProtoBuf.Reflection;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -222,15 +224,27 @@ namespace EP.U3D.EDITOR.PROTO
                 writer.Close();
                 file.Close();
             }
-            // 使用相对路径时，必须设置proto_path，否则无法定位proto文件的位置。
-            Process cmd = new Process();
-            cmd.StartInfo.FileName = env + "/Editor/Libs/Protoc~/ForCS/protogen.exe";
-            string arg = Helper.StringFormat("--proto_path={0} --csharp_out={1} +names=original --package={2} {3}", root, dst, ilr ? $"ILRProto.{name}" : $"CSProto.{name}", Path.GetFileName(tmp));
-            cmd.StartInfo.WorkingDirectory = env + "/Editor/Libs/Protoc~/ForCS/";
-            cmd.StartInfo.Arguments = arg;
-            cmd.Start();
-            cmd.WaitForExit();
-            cmd.Close();
+            var set = new FileDescriptorSet();
+            set.AddImportPath(root);
+            set.Add(Path.GetFileName(tmp), true);
+            set.Files[0].Package = ilr ? $"ILRProto.{name}" : $"CSProto.{name}";
+            set.Process();
+            var errors = set.GetErrors();
+            if (errors.Length > 0)
+            {
+                for (int i = 0; i < errors.Length; i++)
+                {
+                    var e = errors[i];
+                    Helper.LogError(e.Message);
+                }
+            }
+            CSharpCodeGenerator.ClearTypeNames();
+            var files = CSharpCodeGenerator.Default.Generate(set);
+            foreach (var file in files)
+            {
+                var path = Path.Combine(dst, file.Name);
+                File.WriteAllText(path, file.Text);
+            }
             Helper.DeleteFile(tmp);
         }
 
@@ -257,9 +271,9 @@ namespace EP.U3D.EDITOR.PROTO
             }
             // 使用相对路径时，必须设置proto_path，否则无法定位proto文件的位置。
             Process cmd = new Process();
-            cmd.StartInfo.FileName = env + "/Editor/Libs/Protoc~/ForLUA/build.bat";
+            cmd.StartInfo.FileName = env + "/Editor/Libs/Protoc/ForLUA/build.bat";
             string arg = Helper.StringFormat("{0} {1} {2}", dst, root, tmp);
-            cmd.StartInfo.WorkingDirectory = env + "/Editor/Libs/Protoc~/ForLUA/";
+            cmd.StartInfo.WorkingDirectory = env + "/Editor/Libs/Protoc/ForLUA/";
             cmd.StartInfo.Arguments = arg;
             cmd.Start();
             cmd.WaitForExit();
@@ -270,5 +284,19 @@ namespace EP.U3D.EDITOR.PROTO
             ctt = ctt.Replace("#MODULE_NAME#", "Gen.Proto." + name);
             Helper.SaveText(dstf, ctt);
         }
+
+        class NamespaceNormalizer : NameNormalizer
+        {
+            public override string Pluralize(string identifier)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override string GetName(string identifier)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
     }
 }
