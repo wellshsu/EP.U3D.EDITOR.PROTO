@@ -237,7 +237,7 @@ namespace ProtoBuf.Reflection
             if (name != obj.Name) tw.Write($@"Name = @""{obj.Name}""");
             tw.WriteLine(")]");
             WriteOptions(ctx, obj.Options);
-            tw = ctx.Write($"{GetAccess(GetAccess(obj))} partial class {Escape(name)} : ProtoBuf.IMessage");
+            tw = ctx.Write($"{GetAccess(GetAccess(obj))} partial class {Escape(name)}");
             //tw.Write(" : global::ProtoBuf.IExtensible");
             tw.WriteLine();
             ctx.WriteLine("{").Indent();
